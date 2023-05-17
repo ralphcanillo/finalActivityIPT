@@ -1,5 +1,5 @@
-# node-mysql-signup-verification-api
+# node-mysql-crud-api
 
-NodeJS + MySQL - Boilerplate API with Email Sign Up, Verification, Authentication & Forgot Password
+Node.js + MySQL - CRUD API Example
 
-For documentation and instructions see https://jasonwatmore.com/post/2020/09/08/nodejs-mysql-boilerplate-api-with-email-sign-up-verification-authentication-forgot-password
+Documentation and instructions available at https://jasonwatmore.com/post/2021/11/22/nodejs-mysql-crud-api-example-and-tutorial

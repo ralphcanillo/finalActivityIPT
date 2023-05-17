@@ -1,34 +1,24 @@
-const jwt = require('express-jwt');
-const { secret } = require('config.json');
-const db = require('_helpers/db');
+const jwt = require("jsonwebtoken");
+const { secret } = require("config.json");
 
 module.exports = authorize;
 
-function authorize(roles = []) {
-    // roles param can be a single role string (e.g. Role.User or 'User') 
-    // or an array of roles (e.g. [Role.Admin, Role.User] or ['Admin', 'User'])
-    if (typeof roles === 'string') {
-        roles = [roles];
-    }
+function authorize(req, res, next) {
+  const token = req.cookies.token;
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized" });
+  }
 
-    return [
-        // authenticate JWT token and attach user to request object (req.user)
-        jwt({ secret, algorithms: ['HS256'] }),
+  // get user with id from token 'sub' (subject) property
+  // const user = await db.User.findByPk(req.user.sub);
+  const employee = jwt.verify(token, secret);
 
-        // authorize based on user role
-        async (req, res, next) => {
-            const account = await db.Account.findByPk(req.user.id);
+  // check user still exists
+  if (!employee) return res.status(401).json({ message: "Unauthorized" });
 
-            if (!account || (roles.length && !roles.includes(account.role))) {
-                // account no longer exists or role not authorized
-                return res.status(401).json({ message: 'Unauthorized' });
-            }
-
-            // authentication and authorization successful
-            req.user.role = account.role;
-            const refreshTokens = await account.getRefreshTokens();
-            req.user.ownsToken = token => !!refreshTokens.find(x => x.token === token);
-            next();
-        }
-    ];
+  // authorization successful
+  req.employee = employee;
+  next();
 }

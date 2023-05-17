@@ -16,13 +16,15 @@ async function initialize() {
     const sequelize = new Sequelize(database, user, password, { dialect: 'mysql' });
 
     // init models and add them to the exported db object
-    db.Account = require('../accounts/account.model')(sequelize);
-    db.RefreshToken = require('../accounts/refresh-token.model')(sequelize);
+    db.Employee = require('../employees/employee.model')(sequelize);
+    db.Office = require('../offices/office.model')(sequelize);
+    db.Customer = require('../customers/customers.model')(sequelize);
+    db.Product = require('../products/products.model')(sequelize);
+    db.productLine = require('../productlines/productlines.model')(sequelize);
+    db.payments = require('../payments/payment.model')(sequelize);
+    db.Orders = require('../orders/orders.model')(sequelize);
+    db.orderDetails = require('../orderdetails/orderdetails.model')(sequelize);
 
-    // define relationships
-    db.Account.hasMany(db.RefreshToken, { onDelete: 'CASCADE' });
-    db.RefreshToken.belongsTo(db.Account);
-    
     // sync all models with database
     await sequelize.sync();
 }
