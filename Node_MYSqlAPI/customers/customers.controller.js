@@ -50,7 +50,7 @@ function _delete(req, res, next) {
 
 function createSchema(req, res, next) {
     const schema = Joi.object({
-        customerNumber: Joi.string(),
+        customerNumber: Joi.number(),
         customerName: Joi.string().required(),
         contactLastName: Joi.string().required(),
         contactFirstName: Joi.string().required(),
@@ -61,7 +61,7 @@ function createSchema(req, res, next) {
         state: Joi.string().allow(null).required(),  
         postalCode: Joi.string().allow(null).required(),  
         country: Joi.string().required(),  
-        salesRepEmployeeNumber: Joi.string().allow(null).required(),  
+        salesRepEmployeeNumber: Joi.number().allow(null).required(),  
         creditLimit: Joi.string().allow(null).required(),  
       });
       validateRequest(req, next, schema);

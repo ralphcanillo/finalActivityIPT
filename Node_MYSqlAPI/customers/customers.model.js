@@ -16,7 +16,9 @@ function model(sequelize) {
         postalCode: { type: DataTypes.STRING, allowNull: true },
         country: { type: DataTypes.STRING, allowNull: false },
         salesRepEmployeeNumber: { type: DataTypes.INTEGER, allowNull: true, foreignKey: true},
-        creditLimit: { type: DataTypes.STRING, allowNull: true }
+        creditLimit: { type: DataTypes.STRING, allowNull: true },
+        lastUpdated: { type: DataTypes.DATEONLY, allowNull: true}, 
+        isActive: { type: DataTypes.CHAR, defaultValue: '1', allowNull: false }
     };
 
     const options = {

@@ -1,5 +1,6 @@
 // const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
+const { DataTypes, NOW } = require('sequelize');
 module.exports = {
     getAll,
     getById,
@@ -8,7 +9,7 @@ module.exports = {
     delete: _delete
 };
 async function getAll() {
-    return await db.Customer.findAll();
+    return await db.Customer.findAll({where: {isActive: '1'}});
 }
 
 async function getById(id) {
@@ -32,6 +33,7 @@ async function update(id, params) {
 
     // copy params to customer and save
     Object.assign(customer, params);
+    customer.lastUpdated = DataTypes.DATEONLY(NOW);
     await customer.save();
 
     return customer.get();
@@ -39,13 +41,19 @@ async function update(id, params) {
 
 async function _delete(id) {
     const customer = await getUser(id);
-    await customer.destroy();
+
+    customer.isActive = '0';
+    await customer.save();
+
+    return customer.get();
 }
 
 // helper functions
 
 async function getUser(id) {
-    const customer = await db.Customer.findByPk(id);
+    const customer = await db.Customer.findOne({where: {isActive : 1, customerNumber: id}});
     if (!customer) throw 'Customers not found';
     return customer;
 }
+
+
